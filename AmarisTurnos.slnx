@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/AmarisTurnos.Api/AmarisTurnos.Api.csproj" />
+    <Project Path="src/AmarisTurnos.Application/AmarisTurnos.Application.csproj" />
+    <Project Path="src/AmarisTurnos.Domain/AmarisTurnos.Domain.csproj" />
+    <Project Path="src/AmarisTurnos.Infrastructure/AmarisTurnos.Infrastructure.csproj" />
+  </Folder>
+</Solution>
