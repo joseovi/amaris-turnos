@@ -1,5 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using AmarisTurnos.Infrastructure.Persitence;
+using AmarisTurnos.Application.Interfaces;
+using AmarisTurnos.Application.Services;
+using AmarisTurnos.Infrastructure.Repositories;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -10,6 +14,10 @@ builder.Services.AddDbContext<TurnosDbContext>(options =>
     options.UseSqlServer(
         builder.Configuration.GetConnectionString("DefaultConnection")
     ));
+
+builder.Services.AddScoped<ITurnoRepository, TurnoRepository>();
+builder.Services.AddScoped<ITurnoService, TurnoService>();
+builder.Services.AddScoped<ISucursalRepository, SucursalRepository>();
 
 var app = builder.Build();
 
