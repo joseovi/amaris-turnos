@@ -5,4 +5,7 @@
     <Project Path="src/AmarisTurnos.Domain/AmarisTurnos.Domain.csproj" />
     <Project Path="src/AmarisTurnos.Infrastructure/AmarisTurnos.Infrastructure.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AmarisTurnos.Application.Tests/AmarisTurnos.Application.Tests.csproj" />
+  </Folder>
 </Solution>

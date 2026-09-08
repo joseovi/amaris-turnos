@@ -1,11 +1,13 @@
 ﻿using AmarisTurnos.Application.DTOs;
 using AmarisTurnos.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AmarisTurnos.Api.Controllers;
 
 [ApiController]
 [Route("api/sucursales")]
+[Authorize]
 public class SucursalesController : ControllerBase
     {
     private readonly ISucursalRepository _sucursalRepository;

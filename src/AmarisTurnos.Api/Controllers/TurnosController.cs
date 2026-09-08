@@ -1,11 +1,13 @@
 ﻿using AmarisTurnos.Application.DTOs;
 using AmarisTurnos.Application.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace TurnosBanco.Api.Controllers;
 
 [ApiController]
 [Route("api/turnos")]
+[Authorize]
 public class TurnosController : ControllerBase
 {
     private readonly ITurnoService _turnoService;

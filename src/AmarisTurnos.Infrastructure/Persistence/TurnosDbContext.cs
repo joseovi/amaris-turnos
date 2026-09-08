@@ -1,7 +1,7 @@
 ﻿using AmarisTurnos.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace AmarisTurnos.Infrastructure.Persitence
+namespace AmarisTurnos.Infrastructure.Persistence
 {
     public class TurnosDbContext : DbContext
     {
