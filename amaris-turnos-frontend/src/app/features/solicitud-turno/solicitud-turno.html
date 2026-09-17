@@ -1,0 +1,41 @@
+<div class="contenedor-solicitud">
+  <h1>Solicitar Turno</h1>
+
+  @if (cargandoSucursales()) {
+    <p>Cargando sucursales...</p>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="solicitarTurno()">
+      <label for="cedula">Número de cédula</label>
+      <input id="cedula" type="text" formControlName="cedula" placeholder="Ej: 123456789" />
+
+      @if (form.get('cedula')?.invalid && form.get('cedula')?.touched) {
+        <p class="error-campo">Ingresa una cédula válida (solo números, 6 a 15 dígitos).</p>
+      }
+
+      <label for="sucursalId">Sucursal</label>
+      <select id="sucursalId" formControlName="sucursalId">
+        <option [ngValue]="null" disabled>Selecciona una sucursal</option>
+        @for (sucursal of sucursales(); track sucursal.id) {
+          <option [ngValue]="sucursal.id">{{ sucursal.nombre }} - {{ sucursal.ciudad }}</option>
+        }
+      </select>
+
+      @if (form.get('sucursalId')?.invalid && form.get('sucursalId')?.touched) {
+        <p class="error-campo">Debes seleccionar una sucursal.</p>
+      }
+
+      <p class="aviso">
+        Tendrás <strong>15 minutos</strong> desde la generación del turno para activarlo en la sucursal.
+        Si no llegas a tiempo, el turno expirará y podrás solicitar uno nuevo.
+      </p>
+
+      @if (errorMensaje()) {
+        <p class="error-general">{{ errorMensaje() }}</p>
+      }
+
+      <button type="submit" [disabled]="enviando()">
+        {{ enviando() ? 'Solicitando...' : 'Solicitar turno' }}
+      </button>
+    </form>
+  }
+</div>

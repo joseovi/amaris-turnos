@@ -1,0 +1,30 @@
+<div class="contenedor-estado">
+  @if (cargando()) {
+    <p>Cargando turno...</p>
+  } @else if (turno(); as t) {
+    <h1>Turno #{{ t.id }}</h1>
+
+    <p><strong>Cédula:</strong> {{ t.cedula }}</p>
+    <p><strong>Sucursal:</strong> {{ t.sucursalNombre }}</p>
+    <p><strong>Estado:</strong> <span class="badge-{{ t.estado.toLowerCase() }}">{{ t.estado }}</span></p>
+    <p><strong>Creado:</strong> {{ t.fechaCreacionUtc | date: 'short' }}</p>
+    <p><strong>Expira:</strong> {{ t.fechaExpiracionUtc | date: 'short' }}</p>
+
+    @if (t.estado === 'Pending') {
+      <button (click)="activar()" [disabled]="activando()">
+        {{ activando() ? 'Activando...' : 'Activar turno en sucursal' }}
+      </button>
+    }
+
+    @if (t.estado === 'Expired') {
+      <p class="error-general">Este turno expiró. Puedes solicitar uno nuevo.</p>
+      <button (click)="solicitarOtroTurno()">Solicitar otro turno</button>
+    }
+
+    @if (errorMensaje()) {
+      <p class="error-general">{{ errorMensaje() }}</p>
+    }
+  } @else {
+    <p class="error-general">No se encontró el turno.</p>
+  }
+</div>
