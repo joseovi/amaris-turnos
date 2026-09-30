@@ -32,9 +32,13 @@ namespace AmarisTurnos.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NombreUsuario = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Cedula = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Nombre = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
                     PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Rol = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
+                    Rol = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Activo = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -47,7 +51,7 @@ namespace AmarisTurnos.Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Cedula = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    UsuarioId = table.Column<int>(type: "int", nullable: false),
                     SucursalId = table.Column<int>(type: "int", nullable: false),
                     Estado = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     FechaCreacionUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -64,12 +68,13 @@ namespace AmarisTurnos.Infrastructure.Migrations
                         principalTable: "Sucursales",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Turnos_Usuarios_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "Usuarios",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Turnos_Cedula_FechaCreacionUtc",
-                table: "Turnos",
-                columns: new[] { "Cedula", "FechaCreacionUtc" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Turnos_SucursalId",
@@ -77,9 +82,14 @@ namespace AmarisTurnos.Infrastructure.Migrations
                 column: "SucursalId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Usuarios_NombreUsuario",
+                name: "IX_Turnos_UsuarioId_FechaCreacionUtc",
+                table: "Turnos",
+                columns: new[] { "UsuarioId", "FechaCreacionUtc" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Usuarios_Cedula",
                 table: "Usuarios",
-                column: "NombreUsuario",
+                column: "Cedula",
                 unique: true);
         }
 
@@ -90,10 +100,10 @@ namespace AmarisTurnos.Infrastructure.Migrations
                 name: "Turnos");
 
             migrationBuilder.DropTable(
-                name: "Usuarios");
+                name: "Sucursales");
 
             migrationBuilder.DropTable(
-                name: "Sucursales");
+                name: "Usuarios");
         }
     }
 }

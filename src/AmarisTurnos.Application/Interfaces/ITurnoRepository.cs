@@ -14,7 +14,7 @@ namespace AmarisTurnos.Application.Interfaces
         Task<Turno?> ObtenerPorIdAsync(int id, CancellationToken ct = default);
 
         Task<List<Turno>> ObtenerTodosAsync(CancellationToken ct = default);
-
+        Task<List<Turno>> ObtenerPorUsuarioYFechaAsync(int usuarioId, DateTime fechaUtc, CancellationToken ct = default);
         Task GuardarCambiosAsync(CancellationToken ct = default);
     }
 }

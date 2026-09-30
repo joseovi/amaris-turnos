@@ -1,6 +1,6 @@
 ﻿using AmarisTurnos.Application.Interfaces;
 using AmarisTurnos.Domain.Entities;
-using AmarisTurnos.Infrastructure.Persitence;
+using AmarisTurnos.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 
@@ -30,7 +30,7 @@ namespace AmarisTurnos.Infrastructure.Repositories
                 var turnosHoy = await _context.Turnos
                 .FromSqlInterpolated($@"
                     SELECT * FROM Turnos WITH (UPDLOCK, HOLDLOCK)
-                    WHERE Cedula = {turno.Cedula}
+                    WHERE UsuarioId = {turno.UsuarioId}
                       AND FechaCreacionUtc >= {inicioDiaUtc}
                       AND FechaCreacionUtc < {finDiaUtc}")
                 .CountAsync(ct);
@@ -64,6 +64,18 @@ namespace AmarisTurnos.Infrastructure.Repositories
                 .Include(t => t.Sucursal)
                 .OrderByDescending(t => t.FechaCreacionUtc)
                 .ToListAsync(ct);
+
+        public async Task<List<Turno>> ObtenerPorUsuarioYFechaAsync(int usuarioId, DateTime fechaUtc, CancellationToken ct = default)
+        {
+            var inicioDia = fechaUtc.Date;
+            var finDia = inicioDia.AddDays(1);
+
+            return await _context.Turnos
+                .Include(t => t.Sucursal)
+                .Where(t => t.UsuarioId == usuarioId && t.FechaCreacionUtc >= inicioDia && t.FechaCreacionUtc < finDia)
+                .OrderByDescending(t => t.FechaCreacionUtc)
+                .ToListAsync(ct);
+        }
 
         public async Task GuardarCambiosAsync(CancellationToken ct = default)
             => await _context.SaveChangesAsync(ct);

@@ -5,7 +5,7 @@ namespace AmarisTurnos.Application.DTOs
     public class LoginDto
     {
         [Required]
-        public string NombreUsuario { get; set; } = string.Empty;
+        public string Cedula { get; set; } = string.Empty;
 
         [Required]
         public string Password { get; set; } = string.Empty;

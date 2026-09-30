@@ -1,4 +1,5 @@
-﻿using AmarisTurnos.Application.DTOs;
+﻿using System.Security.Claims;
+using AmarisTurnos.Application.DTOs;
 using AmarisTurnos.Application.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +18,13 @@ public class TurnosController : ControllerBase
         _turnoService = turnoService;
     }
 
+    private int UsuarioIdActual =>
+        int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
+
     [HttpPost]
-    public async Task<ActionResult<TurnoDto>> Crear(
-        [FromBody] CrearTurnoDto dto, CancellationToken ct)
+    public async Task<ActionResult<TurnoDto>> Crear([FromBody] CrearTurnoDto dto, CancellationToken ct)
     {
-        var turno = await _turnoService.CrearTurnoAsync(dto, ct);
+        var turno = await _turnoService.CrearTurnoAsync(UsuarioIdActual, dto, ct);
         return CreatedAtAction(nameof(ObtenerPorId), new { id = turno.Id }, turno);
     }
 
@@ -32,22 +35,17 @@ public class TurnosController : ControllerBase
         return Ok(turno);
     }
 
-    [HttpGet]
-    public async Task<ActionResult<List<TurnoDto>>> ObtenerTodos(
-        [FromQuery] string? cedula, CancellationToken ct)
+    [HttpGet("mios")]
+    public async Task<ActionResult<List<TurnoDto>>> ObtenerMisTurnosDeHoy(CancellationToken ct)
     {
-        var turnos = await _turnoService.ObtenerTodosAsync(ct);
-
-        if (!string.IsNullOrWhiteSpace(cedula))
-            turnos = turnos.Where(t => t.Cedula == cedula).ToList();
-
+        var turnos = await _turnoService.ObtenerMisTurnosDeHoyAsync(UsuarioIdActual, ct);
         return Ok(turnos);
     }
 
     [HttpPatch("{id:int}/activar")]
     public async Task<ActionResult<TurnoDto>> Activar(int id, CancellationToken ct)
     {
-        var turno = await _turnoService.ActivarTurnoAsync(id, ct);
+        var turno = await _turnoService.ActivarTurnoAsync(UsuarioIdActual, id, ct);
         return Ok(turno);
     }
 }

@@ -23,14 +23,16 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings["Key"]!));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-        var expiracionMinutos = int.Parse(jwtSettings["ExpiracionMinutos"]!);
-        var expiraUtc = DateTime.UtcNow.AddMinutes(expiracionMinutos);
+        var expirationInMinutes = int.Parse(jwtSettings["ExpirationInMinutes"]!);
+        var expiraUtc = DateTime.UtcNow.AddMinutes(expirationInMinutes);
 
         var claims = new List<Claim>
     {
+        new(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
         new(JwtRegisteredClaimNames.Sub, usuario.Id.ToString()),
-        new(ClaimTypes.Name, usuario.NombreUsuario),
-        new(ClaimTypes.Role, usuario.Rol),
+        new(ClaimTypes.Name, usuario.Nombre),
+        new("cedula", usuario.Cedula),
+        new(ClaimTypes.Role, usuario.Rol.ToString()),
         new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
     };
 
@@ -41,8 +43,6 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             expires: expiraUtc,
             signingCredentials: credentials);
 
-        var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-
-        return (tokenString, expiraUtc);
+        return (new JwtSecurityTokenHandler().WriteToken(token), expiraUtc);    
     }
 }

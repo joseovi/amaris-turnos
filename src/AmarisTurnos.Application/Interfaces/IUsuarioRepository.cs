@@ -4,6 +4,9 @@ namespace AmarisTurnos.Application.Interfaces
 {
     public interface IUsuarioRepository
     {
-        Task<Usuario> ObtenerPorNombreUsuarioAsync(string nombreUsuario, CancellationToken ct = default);
+        Task<Usuario?> ObtenerPorCedulaAsync(string cedula, CancellationToken ct = default);
+        Task<Usuario?> ObtenerPorIdAsync(int id, CancellationToken ct = default);
+        Task<bool> ExisteCedulaAsync(string cedula, CancellationToken ct = default);
+        Task<Usuario> CrearAsync(Usuario usuario, CancellationToken ct = default);
     }
 }

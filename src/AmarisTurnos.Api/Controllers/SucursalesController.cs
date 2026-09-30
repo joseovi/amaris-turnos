@@ -1,5 +1,6 @@
 ﻿using AmarisTurnos.Application.DTOs;
 using AmarisTurnos.Application.Interfaces;
+using AmarisTurnos.Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,6 +32,30 @@ public class SucursalesController : ControllerBase
         }).ToList();
 
         return Ok(dtos);
+    }
+
+    [HttpPost]
+    [Authorize(Roles = "Admin")] 
+    public async Task<ActionResult<SucursalDto>> Crear([FromBody] CrearSucursalDto dto, CancellationToken ct)
+    {
+        var sucursal = new Sucursal
+        {
+            Nombre = dto.Nombre,
+            Direccion = dto.Direccion,
+            Ciudad = dto.Ciudad
+        };
+
+        var creada = await _sucursalRepository.CrearAsync(sucursal, ct);
+
+        var resultado = new SucursalDto
+        {
+            Id = creada.Id,
+            Nombre = creada.Nombre,
+            Direccion = creada.Direccion,
+            Ciudad = creada.Ciudad
+        };
+
+        return CreatedAtAction(nameof(ObtenerTodas), resultado);
     }
 }
 

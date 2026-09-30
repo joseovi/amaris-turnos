@@ -1,6 +1,6 @@
 ﻿using AmarisTurnos.Application.Interfaces;
 using AmarisTurnos.Domain.Entities;
-using AmarisTurnos.Infrastructure.Persitence;
+using AmarisTurnos.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace AmarisTurnos.Infrastructure.Repositories

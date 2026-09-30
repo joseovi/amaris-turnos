@@ -15,6 +15,13 @@ public class AuthController : ControllerBase
         _authService = authService;
     }
 
+    [HttpPost("registro")]
+    public async Task<ActionResult<LoginResponseDto>> Registrar([FromBody] RegistroDto dto, CancellationToken ct)
+    {
+        var resultado = await _authService.RegistrarAsync(dto, ct);
+        return StatusCode(StatusCodes.Status201Created, resultado);
+    }
+
     [HttpPost("login")]
     public async Task<ActionResult<LoginResponseDto>> Login([FromBody] LoginDto dto, CancellationToken ct)
     {

@@ -29,16 +29,7 @@ namespace AmarisTurnos.Infrastructure.Persistence
             modelBuilder.Entity<Turno>(entity =>
             {
                 entity.HasKey(t => t.Id);
-
-                entity.Property(t => t.Cedula)
-                    .IsRequired()
-                    .HasMaxLength(20);
-
-                entity.Property(t => t.Estado)
-                    .HasConversion<string>()   // guarda el enum como texto legible, no como número
-                    .HasMaxLength(20)
-                    .IsRequired();
-
+                entity.Property(t => t.Estado).HasConversion<string>().HasMaxLength(20).IsRequired();
                 entity.Property(t => t.FechaCreacionUtc).IsRequired();
                 entity.Property(t => t.FechaExpiracionUtc).IsRequired();
 
@@ -48,17 +39,26 @@ namespace AmarisTurnos.Infrastructure.Persistence
                     .HasForeignKey(t => t.SucursalId)
                     .OnDelete(DeleteBehavior.Restrict); // no borrar turnos si se borra la sucursal
 
+                entity.HasOne(t => t.Usuario)
+                     .WithMany(u => u.Turnos)
+                     .HasForeignKey(t => t.UsuarioId)
+                     .OnDelete(DeleteBehavior.Restrict);
+
                 // Índice compuesto: acelera la consulta "cuántos turnos tiene esta cédula hoy"
-                entity.HasIndex(t => new { t.Cedula, t.FechaCreacionUtc });
+                entity.HasIndex(t => new { t.UsuarioId, t.FechaCreacionUtc });
             });
 
             modelBuilder.Entity<Usuario>(entity =>
             {
                 entity.HasKey(u => u.Id);
-                entity.Property(u => u.NombreUsuario).IsRequired().HasMaxLength(100);
-                entity.HasIndex(u => u.NombreUsuario).IsUnique(); // no puede haber dos usuarios con el mismo nombre
+                entity.Property(u => u.Cedula).IsRequired().HasMaxLength(20);
+                entity.HasIndex(u => u.Cedula).IsUnique(); // no puede haber dos usuarios con el mismo nombre
+                entity.Property(u => u.Nombre).IsRequired().HasMaxLength(150);
+                entity.Property(u => u.Email).HasMaxLength(150);
                 entity.Property(u => u.PasswordHash).IsRequired();
-                entity.Property(u => u.Rol).IsRequired().HasMaxLength(50);
+                entity.Property(u => u.Rol).HasConversion<string>().HasMaxLength(20).IsRequired();
+                entity.Property(u => u.Activo).IsRequired();
+                entity.Property(u => u.CreatedAtUtc).IsRequired();
             });
         }
     }
