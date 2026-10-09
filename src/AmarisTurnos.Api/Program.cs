@@ -1,3 +1,4 @@
+using AmarisTurnos.Api.BackgroundServices;
 using AmarisTurnos.Api.Middleware;
 using AmarisTurnos.Application.Interfaces;
 using AmarisTurnos.Application.Services;
@@ -11,6 +12,7 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHostedService<TurnoExpiracionWorker>();
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -20,6 +22,9 @@ builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<ISucursalRepository, SucursalRepository>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IJwtTokenGenerator, JwtTokenGenerator>();
+builder.Services.AddScoped<IUsuarioAdminService, UsuarioAdminService>();
+builder.Services.AddScoped<IAdminTurnoService, AdminTurnoService>();
+builder.Services.AddScoped<ISucursalAdminService, SucursalAdminService>();
 
 var jwtSettings = builder.Configuration.GetSection("Jwt");
 

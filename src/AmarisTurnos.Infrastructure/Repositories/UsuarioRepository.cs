@@ -29,4 +29,27 @@ public class UsuarioRepository : IUsuarioRepository
         await _context.SaveChangesAsync(ct);
         return usuario;
     }
+
+    public async Task<List<Usuario>> ObtenerTodosAsync(string? busqueda, CancellationToken ct = default)
+    {
+        var query = _context.Usuarios.AsQueryable();
+
+        if (!string.IsNullOrWhiteSpace(busqueda))
+        {
+            query = query.Where(u =>
+                u.Cedula.Contains(busqueda) ||
+                u.Nombre.Contains(busqueda));
+        }
+
+        return await query.OrderBy(u => u.Nombre).ToListAsync(ct);
+    }
+
+    public async Task GuardarCambiosAsync(CancellationToken ct = default)
+    => await _context.SaveChangesAsync(ct);
+
+    public async Task EliminarAsync(Usuario usuario, CancellationToken ct = default)
+    {
+        _context.Usuarios.Remove(usuario);
+        await _context.SaveChangesAsync(ct);
+    }
 }

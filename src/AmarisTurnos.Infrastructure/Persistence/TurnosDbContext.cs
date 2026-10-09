@@ -13,7 +13,15 @@ namespace AmarisTurnos.Infrastructure.Persistence
         public DbSet<Sucursal> Sucursales { get; set; }
         public DbSet<Turno> Turnos { get; set; }
         public DbSet<Usuario> Usuarios { get; set; }
+        protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
+        {
+            base.ConfigureConventions(configurationBuilder);
 
+            // Fuerza que todo DateTime leído de la BD se trate como UTC,
+            // evitando que EF Core lo devuelva con Kind=Unspecified.
+            configurationBuilder.Properties<DateTime>()
+                .HaveConversion<UtcDateTimeConverter>();
+        }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -24,6 +32,7 @@ namespace AmarisTurnos.Infrastructure.Persistence
                 entity.Property(s => s.Nombre).IsRequired().HasMaxLength(150);
                 entity.Property(s => s.Direccion).IsRequired().HasMaxLength(250);
                 entity.Property(s => s.Ciudad).IsRequired().HasMaxLength(100);
+                entity.Property(s => s.Activo).IsRequired();
             });
 
             modelBuilder.Entity<Turno>(entity =>

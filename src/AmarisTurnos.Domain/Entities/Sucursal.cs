@@ -6,6 +6,7 @@
         public string Nombre { get; set; } = string.Empty;
         public string Direccion { get; set; } = string.Empty;
         public string Ciudad { get; set; } = string.Empty;
+        public bool Activo { get; set; } = true;
 
         public ICollection<Turno> Turnos { get; set; } = new List<Turno>();
     }

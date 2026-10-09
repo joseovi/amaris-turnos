@@ -5,16 +5,28 @@ namespace AmarisTurnos.Application.Interfaces
     public interface ITurnoRepository
     {
         Task<(bool Creado, int TurnosHoy)> CrearConValidacionDeLimiteAsync(
-        Turno turno,
-        DateTime inicioDiaUtc,
-        DateTime finDiaUtc,
-        int limiteDiario,
-        CancellationToken ct = default);
+            Turno turno,
+            DateTime inicioDiaUtc,
+            DateTime finDiaUtc,
+            int limiteDiario,
+            CancellationToken ct = default);
 
         Task<Turno?> ObtenerPorIdAsync(int id, CancellationToken ct = default);
 
         Task<List<Turno>> ObtenerTodosAsync(CancellationToken ct = default);
+
         Task<List<Turno>> ObtenerPorUsuarioYFechaAsync(int usuarioId, DateTime fechaUtc, CancellationToken ct = default);
+
+        Task<List<Turno>> ObtenerConFiltrosAsync(
+            DateTime? fecha,
+            int? sucursalId,
+            EstadoTurno? estado,
+            string? cedula,
+            CancellationToken ct = default);
+
+        Task<Dictionary<EstadoTurno, int>> ContarPorEstadoHoyAsync(CancellationToken ct = default);
+
         Task GuardarCambiosAsync(CancellationToken ct = default);
+        Task<int> ExpirarVencidosAsync(DateTime ahoraUtc, CancellationToken ct = default);
     }
 }

@@ -28,5 +28,15 @@ namespace AmarisTurnos.Infrastructure.Repositories
             await _context.SaveChangesAsync(ct);
             return sucursal;
         }
+
+        public async Task GuardarCambiosAsync(CancellationToken ct = default)
+            => await _context.SaveChangesAsync(ct);
+
+        public async Task<Sucursal> EliminarAsync(Sucursal sucursal, CancellationToken ct = default)
+        {
+            _context.Sucursales.Remove(sucursal);
+            await _context.SaveChangesAsync(ct);
+            return sucursal;
+        }
     }
 }

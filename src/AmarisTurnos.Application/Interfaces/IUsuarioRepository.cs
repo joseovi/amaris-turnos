@@ -8,5 +8,8 @@ namespace AmarisTurnos.Application.Interfaces
         Task<Usuario?> ObtenerPorIdAsync(int id, CancellationToken ct = default);
         Task<bool> ExisteCedulaAsync(string cedula, CancellationToken ct = default);
         Task<Usuario> CrearAsync(Usuario usuario, CancellationToken ct = default);
+        Task<List<Usuario>> ObtenerTodosAsync(string? busqueda, CancellationToken ct = default);
+        Task GuardarCambiosAsync(CancellationToken ct = default);
+        Task EliminarAsync(Usuario usuario, CancellationToken ct = default);
     }
 }

@@ -87,6 +87,8 @@ namespace AmarisTurnos.Application.Services
             var turnos = await _turnoRepository.ObtenerPorUsuarioYFechaAsync(usuarioId, DateTime.UtcNow, ct);
             return turnos.Select(t => MapearADto(t, t.Sucursal?.Nombre ?? string.Empty)).ToList();
         }
+        public async Task<int> ExpirarTurnosVencidosAsync(CancellationToken ct = default)
+            => await _turnoRepository.ExpirarVencidosAsync(DateTime.UtcNow, ct);
 
         private static TurnoDto MapearADto(Turno turno, string sucursalNombre) => new()
         {

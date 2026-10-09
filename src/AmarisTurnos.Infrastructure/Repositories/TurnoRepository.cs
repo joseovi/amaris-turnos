@@ -57,11 +57,13 @@ namespace AmarisTurnos.Infrastructure.Repositories
         public async Task<Turno?> ObtenerPorIdAsync(int id, CancellationToken ct = default)
             => await _context.Turnos
                 .Include(t => t.Sucursal)
+                .Include(t => t.Usuario)
                 .FirstOrDefaultAsync(t => t.Id == id, ct);
 
         public async Task<List<Turno>> ObtenerTodosAsync(CancellationToken ct = default)
             => await _context.Turnos
                 .Include(t => t.Sucursal)
+                .Include(t => t.Usuario)
                 .OrderByDescending(t => t.FechaCreacionUtc)
                 .ToListAsync(ct);
 
@@ -72,13 +74,58 @@ namespace AmarisTurnos.Infrastructure.Repositories
 
             return await _context.Turnos
                 .Include(t => t.Sucursal)
+                .Include(t => t.Usuario)
                 .Where(t => t.UsuarioId == usuarioId && t.FechaCreacionUtc >= inicioDia && t.FechaCreacionUtc < finDia)
                 .OrderByDescending(t => t.FechaCreacionUtc)
                 .ToListAsync(ct);
         }
 
+        public async Task<List<Turno>> ObtenerConFiltrosAsync(
+                DateTime? fecha, int? sucursalId, EstadoTurno? estado, string? cedula, CancellationToken ct = default)
+        {
+            var query = _context.Turnos
+                .Include(t => t.Sucursal)
+                .Include(t => t.Usuario)
+                .AsQueryable();
+
+            if (fecha.HasValue)
+            {
+                var inicio = fecha.Value.Date;
+                var fin = inicio.AddDays(1);
+                query = query.Where(t => t.FechaCreacionUtc >= inicio && t.FechaCreacionUtc < fin);
+            }
+
+            if (sucursalId.HasValue)
+                query = query.Where(t => t.SucursalId == sucursalId.Value);
+
+            if (estado.HasValue)
+                query = query.Where(t => t.Estado == estado.Value);
+
+            if (!string.IsNullOrWhiteSpace(cedula))
+                query = query.Where(t => t.Usuario!.Cedula.Contains(cedula));
+
+            return await query.OrderByDescending(t => t.FechaCreacionUtc).ToListAsync(ct);
+        }
+
+        public async Task<Dictionary<EstadoTurno, int>> ContarPorEstadoHoyAsync(CancellationToken ct = default)
+        {
+            var inicio = DateTime.UtcNow.Date;
+            var fin = inicio.AddDays(1);
+
+            return await _context.Turnos
+                .Where(t => t.FechaCreacionUtc >= inicio && t.FechaCreacionUtc < fin)
+                .GroupBy(t => t.Estado)
+                .Select(g => new { Estado = g.Key, Cantidad = g.Count() })
+                .ToDictionaryAsync(x => x.Estado, x => x.Cantidad, ct);
+        }
+
         public async Task GuardarCambiosAsync(CancellationToken ct = default)
             => await _context.SaveChangesAsync(ct);
+
+        public async Task<int> ExpirarVencidosAsync(DateTime ahoraUtc, CancellationToken ct = default)
+            => await _context.Turnos
+               .Where(t => t.Estado == EstadoTurno.Pending && t.FechaExpiracionUtc < ahoraUtc)
+               .ExecuteUpdateAsync(s => s.SetProperty(t => t.Estado, EstadoTurno.Expired), ct);
     }
 
 }
