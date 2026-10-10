@@ -232,6 +232,27 @@ namespace AmarisTurnos.Application.Tests
         }
 
         [Fact]
+        public async Task ActivarTurnoAsync_ConTurnoDeOtroUsuario_DeberiaRechazarloSinModificarlo()
+        {
+            var turno = new Turno
+            {
+                Id = 1,
+                UsuarioId = 99, 
+                Estado = EstadoTurno.Pending,
+                FechaExpiracionUtc = DateTime.UtcNow.AddMinutes(10)
+            };
+
+            _turnoRepositoryMock
+                .Setup(r => r.ObtenerPorIdAsync(1, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(turno);
+
+            await Assert.ThrowsAsync<ReglaDeNegocioException>(() => _sut.ActivarTurnoAsync(usuarioId: 1, turnoId: 1));
+
+            Assert.Equal(EstadoTurno.Pending, turno.Estado);
+            _turnoRepositoryMock.Verify(r => r.GuardarCambiosAsync(It.IsAny<CancellationToken>()), Times.Never);
+        }
+
+        [Fact]
         public async Task ObtenerMisTurnosDeHoyAsync_DeberiaMapearTodosLosTurnosCorrectamente()
         {
             int usuarioId = 1;

@@ -67,6 +67,11 @@ namespace AmarisTurnos.Application.Services
                 throw new ReglaDeNegocioException("No se puede activar un turno que no te pertenece.");
             }
 
+            if (turno.Estado != EstadoTurno.Pending)
+            {
+                throw new ReglaDeNegocioException($"No se puede activar un turno en estado {turno.Estado}.");
+            }
+
             turno.Estado = EstadoTurno.Active;
             turno.FechaActivacionUtc = DateTime.UtcNow;
             await _turnoRepository.GuardarCambiosAsync(ct);
