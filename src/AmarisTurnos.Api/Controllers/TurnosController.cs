@@ -31,7 +31,7 @@ public class TurnosController : ControllerBase
     [HttpGet("{id:int}")]
     public async Task<ActionResult<TurnoDto>> ObtenerPorId(int id, CancellationToken ct)
     {
-        var turno = await _turnoService.ObtenerPorIdAsync(id, ct);
+        var turno = await _turnoService.ObtenerPorIdAsync(UsuarioIdActual, id, ct);
         return Ok(turno);
     }
 

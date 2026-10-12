@@ -79,10 +79,13 @@ namespace AmarisTurnos.Application.Services
             return MapearADto(turno, turno.Sucursal?.Nombre ?? string.Empty);
         }
 
-        public async Task<TurnoDto> ObtenerPorIdAsync(int id, CancellationToken ct = default)
+        public async Task<TurnoDto> ObtenerPorIdAsync(int usuarioId, int id, CancellationToken ct = default)
         {
             var turno = await _turnoRepository.ObtenerPorIdAsync(id, ct)
                 ?? throw new ReglaDeNegocioException("El turno no existe.");
+
+            if (turno.UsuarioId != usuarioId)
+                throw new ReglaDeNegocioException("El turno no existe.");
 
             return MapearADto(turno, turno.Sucursal?.Nombre ?? string.Empty);
         }

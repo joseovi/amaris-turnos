@@ -195,14 +195,14 @@ namespace AmarisTurnos.Application.Tests
         }
 
         [Fact]
-        public async Task ObtenerPorIdAsync_ConIdExistente_DeberiaRetornarElTurno()
+        public async Task ObtenerPorIdAsync_ConTurnoPropio_DeberiaRetornarElTurno()
         {
             // Arrange
             var turno = new Turno
             {
                 Id = 1,
-                UsuarioId = 1,
-                Usuario = new Usuario { Id = 1, Cedula = "123456789" },
+                UsuarioId = 7,
+                Usuario = new Usuario { Id = 7, Cedula = "123456789" },
                 Estado = EstadoTurno.Pending,
                 Sucursal = new Sucursal { Nombre = "Sucursal Centro" }
             };
@@ -212,7 +212,7 @@ namespace AmarisTurnos.Application.Tests
                 .ReturnsAsync(turno);
 
             // Act
-            var resultado = await _sut.ObtenerPorIdAsync(1);
+            var resultado = await _sut.ObtenerPorIdAsync(usuarioId: 7, id: 1);
 
             // Assert
             Assert.Equal(1, resultado.Id);
@@ -228,7 +228,29 @@ namespace AmarisTurnos.Application.Tests
                 .ReturnsAsync((Turno?)null);
 
             // Act & Assert
-            await Assert.ThrowsAsync<ReglaDeNegocioException>(() => _sut.ObtenerPorIdAsync(999));
+            await Assert.ThrowsAsync<ReglaDeNegocioException>(
+                () => _sut.ObtenerPorIdAsync(usuarioId: 7, id: 999));
+        }
+
+        [Fact]
+        public async Task ObtenerPorIdAsync_ConTurnoDeOtroUsuario_DeberiaRechazarlo()
+        {
+            var turno = new Turno
+            {
+                Id = 1,
+                UsuarioId = 99,
+                Estado = EstadoTurno.Pending,
+                Sucursal = new Sucursal { Nombre = "Sucursal Centro" }
+            };
+
+            _turnoRepositoryMock
+                .Setup(r => r.ObtenerPorIdAsync(1, It.IsAny<CancellationToken>()))
+                .ReturnsAsync(turno);
+
+            var ex = await Assert.ThrowsAsync<ReglaDeNegocioException>(
+                () => _sut.ObtenerPorIdAsync(usuarioId: 7, id: 1));
+
+            Assert.Equal("El turno no existe.", ex.Message);
         }
 
         [Fact]
