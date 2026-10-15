@@ -1,14 +1,11 @@
 # Amaris Turnos
 
-Sistema web de **agendamiento de turnos bancarios**. Los clientes reservan un turno en la sucursal que prefieran, 
-tienen **15 minutos** para llegar y activarlo, y no pueden pedir más de **5 turnos por día**. 
-Un panel administrativo permite gestionar usuarios, sucursales y turnos.
- 
-Proyecto de portafolio construido a partir del enunciado de una prueba técnica de desarrollo (API REST en .NET + frontend en Angular). 
-Usa **.NET 10** (el enunciado original contemplaba .NET 6 a 8) y **Angular 21**.
+Sistema web de **agendamiento de turnos bancarios**. Los clientes reservan un turno en la sucursal que prefieran, tienen **15 minutos** para llegar y activarlo, y no pueden pedir más de **5 turnos por día**. Un panel administrativo permite gestionar usuarios, sucursales y turnos.
+
+Proyecto de portafolio construido a partir del enunciado de una prueba técnica de desarrollo (API REST en .NET + frontend en Angular). Usa **.NET 10** (el enunciado original contemplaba .NET 6 a 8) y **Angular 21**.
 
 ## Tabla de contenido
- 
+
 - [Capturas](#capturas)
 - [Funcionalidades](#funcionalidades)
 - [Stack tecnológico](#stack-tecnológico)
@@ -29,46 +26,41 @@ Usa **.NET 10** (el enunciado original contemplaba .NET 6 a 8) y **Angular 21**.
 | Login | Agendar turno |
 |---|---|
 | <img src="docs/screenshots/login.png" width="450" alt="Pantalla de login"> | <img src="docs/screenshots/agendar.png" width="450" alt="Solicitud de turno"> |
- 
-| Mis turnos con cuenta regresiva |
+
+| Mis turnos de hoy |
 |---|
-| <img src="docs/screenshots/mis-turnos.png" width="450" alt="Mis turnos de hoy con barra de tiempo restante"> |
+| <img src="docs/screenshots/mis-turnos.png" width="450" alt="Mis turnos de hoy"> |
 
 ### Administración
- 
+
 | Dashboard | Gestión de usuarios |
 |---|---|
-| <img src="docs/screenshots/dashboard.png" width="450" alt="Dashboard de administración"> | 
-<img src="docs/screenshots/admin-usuarios.png" width="450" alt="Gestión de usuarios"> |
- 
-| Consulta de turnos con filtros |
-|---|
-| <img src="docs/screenshots/admin-turnos.png" width="450" alt="Turnos del sistema con filtros"> |
+| <img src="docs/screenshots/dashboard.png" width="450" alt="Dashboard de administración"> | <img src="docs/screenshots/admin-usuarios.png" width="450" alt="Gestión de usuarios"> |
 
+| Turnos del sistema |
+|---|
+| <img src="docs/screenshots/admin-turnos.png" width="450" alt="Turnos del sistema"> |
 
 ## Funcionalidades
 
 ### Rol `Usuario` (cliente)
 
 - Registro público con cédula, nombre y contraseña elegida por el usuario.
-- Agendar un turno eligiendo sucursal. **La cédula sale de la identidad autenticada**, no se escribe en el formulario,
-por lo que nadie puede pedir turnos a nombre de otra persona.
+- Agendar un turno eligiendo sucursal. **La cédula sale de la identidad autenticada**, no se escribe en el formulario, por lo que nadie puede pedir turnos a nombre de otra persona.
 - Ver "Mis turnos de hoy" con estado, hora de generación y **cuenta regresiva** de 15 minutos con barra de progreso que cambia de color.
 - Activar el turno al llegar a la sucursal.
 - Aviso claro al alcanzar el límite de 5 turnos diarios.
 
 ### Rol `Admin`
- 
+
 - **Dashboard** con turnos del día por estado, usuarios registrados y sucursales activas.
 - **Usuarios**: listar, buscar, crear, editar, activar/desactivar, cambiar rol y eliminar.
 - **Sucursales**: crear, editar, activar/desactivar y eliminar.
 - **Turnos**: consultar con filtros (fecha, sucursal, estado, cédula), **completar** turnos activos y **cancelar** turnos pendientes o activos.
 - Protecciones contra auto-bloqueo: un Admin no puede desactivarse, eliminarse ni cambiarse el rol a sí mismo.
 
-
-
 ## Stack tecnológico
- 
+
 | Capa | Tecnología |
 |---|---|
 | Backend | C#, .NET 10, ASP.NET Core Web API |
@@ -79,12 +71,9 @@ por lo que nadie puede pedir turnos a nombre de otra persona.
 | Frontend | Angular 21 (standalone components, signals), TypeScript, Reactive Forms |
 | Pruebas frontend | Vitest (runner por defecto de Angular 21) |
 
-
 ## Arquitectura
 
-Arquitectura **por capas** con la dependencia apuntando siempre hacia el dominio. Se eligió frente a Clean Architecture completa para no introducir 
-complejidad (MediatR, CQRS, mappers automáticos) que un proyecto de este tamaño no justifica, manteniendo la separación de responsabilidades y 
-la facilidad de pruebas.
+Arquitectura **por capas** con la dependencia apuntando siempre hacia el dominio. Se eligió frente a Clean Architecture completa para no introducir complejidad (MediatR, CQRS, mappers automáticos) que un proyecto de este tamaño no justifica, manteniendo la separación de responsabilidades y la facilidad de pruebas.
 
 ```mermaid
 flowchart LR
@@ -110,12 +99,9 @@ AmarisTurnos/
 ```
 
 - **Domain** no referencia a ningún otro proyecto: el compilador impide que dependa de EF Core o de ASP.NET.
-- **Application** define las interfaces (`ITurnoRepository`, etc.) y **Infrastructure** las implementa,
-lo que permite probar los servicios con repositorios simulados.
+- **Application** define las interfaces (`ITurnoRepository`, etc.) y **Infrastructure** las implementa, lo que permite probar los servicios con repositorios simulados.
 - Los **Controllers son delgados**: traducen HTTP a llamadas de servicio. Nunca devuelven entidades, siempre DTOs.
-- **Repositorio específico, no genérico**: se usa solo donde aporta (testabilidad y la lógica de concurrencia de turnos).
-EF Core ya implementa Unit of Work y Repository, por lo que no se envolvió con un `IRepository<T>` genérico.
-
+- **Repositorio específico, no genérico**: se usa solo donde aporta (testabilidad y la lógica de concurrencia de turnos). EF Core ya implementa Unit of Work y Repository, por lo que no se envolvió con un `IRepository<T>` genérico.
 
 ### Ciclo de vida de un turno
 
@@ -128,8 +114,8 @@ stateDiagram-v2
     Active --> Completed: admin completa
     Active --> Cancelled: admin cancela
 ```
-Solo las transiciones del diagrama son válidas; el servicio rechaza cualquier otra (por ejemplo, reactivar un turno `Completed`).
 
+Solo las transiciones del diagrama son válidas; el servicio rechaza cualquier otra (por ejemplo, reactivar un turno `Completed`).
 
 ## Modelo de datos
 
@@ -165,6 +151,7 @@ erDiagram
         datetime FechaFinalizacionUtc
     }
 ```
+
 - `Usuario.Cedula` tiene **índice único**: es la identidad del cliente y el campo de login.
 - Índice compuesto `(UsuarioId, FechaCreacionUtc)` en `Turno` para resolver rápido "cuántos turnos tiene este usuario hoy".
 - `Rol` y `Estado` son enums en C# guardados como **texto** en la base de datos (legibles al consultar directamente).
@@ -183,11 +170,11 @@ erDiagram
 
 ```bash
 git clone https://github.com/joseovi/amaris-turnos.git
-cd AmarisTurnos
+cd amaris-turnos
 ```
 
 ### 2. Configurar el backend
- 
+
 El repositorio **no incluye secretos**. Crea el archivo `src/AmarisTurnos.Api/appsettings.Development.json` (está en `.gitignore`):
 
 ```json
@@ -209,19 +196,18 @@ Para generar una clave segura en PowerShell:
 
 Si tu SQL Server usa autenticación SQL o una instancia con nombre (por ejemplo `localhost\SQLEXPRESS`), ajusta la cadena de conexión.
 
-
-### 3. Ejecutar el backend###
+### 3. Ejecutar el backend
 
 ```bash
 dotnet run --project src/AmarisTurnos.Api
 ```
 
 En **entorno Development**, al arrancar la API:
- 
+
 1. Aplica las migraciones y crea la base de datos si no existe.
 2. Crea un administrador inicial y tres sucursales de ejemplo (solo si aún no existen).
-Swagger queda disponible en `https://localhost:7271/swagger`. El puerto exacto se imprime en la consola al arrancar.
 
+Swagger queda disponible en `https://localhost:7271/swagger`. El puerto exacto se imprime en la consola al arrancar.
 
 ### 4. Ejecutar el frontend
 
@@ -238,13 +224,12 @@ export const environment = {
   apiUrl: 'https://localhost:7271/api'
 };
 ```
- 
+
 ```bash
 ng serve
 ```
 
 Abre `http://localhost:4200`.
-
 
 ### Credenciales de demostración
 
@@ -252,28 +237,27 @@ Abre `http://localhost:4200`.
 |---|---|---|
 | Admin | `1000000000` | `Admin123!` |
 | Usuario | Se crea desde `/registro` | La que elijas |
- 
-Estas credenciales provienen de `Seed:AdminCedula` y `Seed:AdminPassword` en `appsettings.json`, y el seeder **solo se ejecuta en Development**. 
-Nunca debe existir una credencial conocida en producción.
+
+Estas credenciales provienen de `Seed:AdminCedula` y `Seed:AdminPassword` en `appsettings.json`, y el seeder **solo se ejecuta en Development**. Nunca debe existir una credencial conocida en producción.
 
 ## Pruebas
 
 ```bash
 # Backend (xUnit + Moq)
 dotnet test
- 
+
 # Frontend (Vitest)
 cd amaris-turnos-frontend
 ng test
 ```
 
 Las pruebas del backend validan la lógica de negocio de `TurnoService` aislada de la base de datos, con repositorios simulados:
- 
+
 - Crear turno: caso correcto, sucursal inexistente y límite diario superado.
 - Activar turno: caso correcto, turno vencido, turno ya activo, turno de otro usuario e inexistente.
 - Consultas y expiración masiva de turnos vencidos.
-Qué **no** cubren: la corrección de la transacción SQL con bloqueo (requiere una prueba de integración contra SQL Server real)
-ni el comportamiento visual del frontend (requeriría pruebas end to end).
+
+Qué **no** cubren: la corrección de la transacción SQL con bloqueo (requiere una prueba de integración contra SQL Server real) ni el comportamiento visual del frontend (requeriría pruebas end to end).
 
 ## API REST
 
@@ -335,40 +319,26 @@ Todo el bloque `/api/admin/*` está protegido con `[Authorize(Roles = "Admin")]`
 
 ## Decisiones técnicas
 
-**La identidad viene del token, nunca del cliente.** 
-Los endpoints de usuario no reciben "de quién" son los datos. `GET /api/turnos/mios` y `POST /api/turnos` 
-leen el identificador del claim `NameIdentifier` del JWT ya verificado. Cambiar un ID en la URL no permite ver datos ajenos 
-porque ese ID no se usa para decidir la pertenencia. Donde sí hay un ID en la ruta (`/activar`), el servicio verifica que el turno 
-pertenezca al usuario antes de cualquier cambio.
+**La identidad viene del token, nunca del cliente.** Los endpoints de usuario no reciben "de quién" son los datos. `GET /api/turnos/mios` y `POST /api/turnos` leen el identificador del claim `NameIdentifier` del JWT ya verificado. Cambiar un ID en la URL no permite ver datos ajenos porque ese ID no se usa para decidir la pertenencia. Donde sí hay un ID en la ruta (`/activar`), el servicio verifica que el turno pertenezca al usuario antes de cualquier cambio.
 
-**Concurrencia en el límite de 5 turnos.** Validar "contar y luego insertar" tiene una condición de carrera: 
-dos peticiones simultáneas pueden leer 4 y crear dos turnos. Se resuelve en `TurnoRepository` con una transacción y una lectura con 
-`WITH (UPDLOCK, HOLDLOCK)`, de modo que la segunda petición espera a que la primera confirme. El punto de verdad es la base de datos y no la memoria del proceso, 
-así que funciona con varias instancias de la API (un `lock` en memoria no lo haría).
+**Concurrencia en el límite de 5 turnos.** Validar "contar y luego insertar" tiene una condición de carrera: dos peticiones simultáneas pueden leer 4 y crear dos turnos. Se resuelve en `TurnoRepository` con una transacción y una lectura con `WITH (UPDLOCK, HOLDLOCK)`, de modo que la segunda petición espera a que la primera confirme. El punto de verdad es la base de datos y no la memoria del proceso, así que funciona con varias instancias de la API (un `lock` en memoria no lo haría).
 
-**Fechas en UTC.** Todo se guarda en UTC. SQL Server no conserva el `Kind` de un `datetime2`, así que un convertidor global en el `DbContext` marca como UTC todo 
-`DateTime` leído; sin él, el JSON sale sin la `Z` y el navegador interpreta la hora como local. La conversión a hora local ocurre solo al mostrar, 
-con el pipe `date` de Angular.
+**Fechas en UTC.** Todo se guarda en UTC. SQL Server no conserva el `Kind` de un `datetime2`, así que un convertidor global en el `DbContext` marca como UTC todo `DateTime` leído; sin él, el JSON sale sin la `Z` y el navegador interpreta la hora como local. La conversión a hora local ocurre solo al mostrar, con el pipe `date` de Angular.
 
 **Expiración de turnos en dos capas.**
 
-1. Un `BackgroundService` (`TurnoExpiracionWorker`) ejecuta cada 60 segundos (configurable con `Turnos:IntervaloExpiracionSegundos`)
-un único `UPDATE` masivo con `ExecuteUpdateAsync` sobre los turnos `Pending` vencidos. Es idempotente, por lo que dos instancias corriendo a la vez no causan daño.
-
+1. Un `BackgroundService` (`TurnoExpiracionWorker`) ejecuta cada 60 segundos (configurable con `Turnos:IntervaloExpiracionSegundos`) un único `UPDATE` masivo con `ExecuteUpdateAsync` sobre los turnos `Pending` vencidos. Es idempotente, por lo que dos instancias corriendo a la vez no causan daño.
 2. `ActivarTurnoAsync` revalida la expiración al instante, cerrando el margen de hasta 60 segundos entre ciclos del worker.
 
-**Dos validaciones para unicidad.** La cédula se verifica antes de insertar (mensaje inmediato) y además existe el índice único en base de datos como 
-garantía final; si la carrera ocurre, la excepción de base de datos se traduce a un error de negocio claro.
+**Dos validaciones para unicidad.** La cédula se verifica antes de insertar (mensaje inmediato) y además existe el índice único en base de datos como garantía final; si la carrera ocurre, la excepción de base de datos se traduce a un error de negocio claro.
 
-**Errores de negocio con una excepción propia.** `ReglaDeNegocioException` se captura en un middleware central y se traduce a `400` con el mensaje. 
-Los errores inesperados devuelven un mensaje genérico y el detalle solo va al log, para no filtrar información interna.
+**Errores de negocio con una excepción propia.** `ReglaDeNegocioException` se captura en un middleware central y se traduce a `400` con el mensaje. Los errores inesperados devuelven un mensaje genérico y el detalle solo va al log, para no filtrar información interna.
 
 **Desactivar antes que eliminar.** Usuarios y sucursales tienen `Activo`. El borrado físico solo procede si no hay turnos asociados, preservando el historial.
 
-*Sin AutoMapper ni MediatR.** El mapeo manual es explícito y fácil de depurar a esta escala. Cada patrón se incorporó solo donde resolvía un problema real.
+**Sin AutoMapper ni MediatR.** El mapeo manual es explícito y fácil de depurar a esta escala. Cada patrón se incorporó solo donde resolvía un problema real.
 
-**Frontend.** Componentes standalone con carga diferida por ruta, estado con signals, Reactive Forms, un interceptor que adjunta el token y dos guards componibles:
-`authGuard` (¿hay sesión?) y `roleGuard` (¿el rol coincide con `data.rolesPermitidos` de la ruta?).
+**Frontend.** Componentes standalone con carga diferida por ruta, estado con signals, Reactive Forms, un interceptor que adjunta el token y dos guards componibles: `authGuard` (¿hay sesión?) y `roleGuard` (¿el rol coincide con `data.rolesPermitidos` de la ruta?).
 
 ## Seguridad
 
@@ -392,9 +362,8 @@ Los errores inesperados devuelven un mensaje genérico y el detalle solo va al l
 ## Limitaciones conocidas y próximos pasos
 
 Se listan a propósito; conocer los límites del sistema es parte del diseño.
- 
-- **El "día" del límite de 5 turnos se calcula en UTC**, no en la zona horaria local. En Colombia (UTC-5) el contador diario se reinicia a las 7:00 p. m.
-Una mejora es parametrizar la zona horaria del negocio.
+
+- **El "día" del límite de 5 turnos se calcula en UTC**, no en la zona horaria local. En Colombia (UTC-5) el contador diario se reinicia a las 7:00 p. m. Una mejora es parametrizar la zona horaria del negocio.
 - **El token se guarda en `localStorage`**, expuesto a XSS. La alternativa más segura es una cookie `httpOnly`, que exige ajustar CORS y protección CSRF.
 - Sin **refresh tokens**: al expirar el JWT hay que volver a iniciar sesión.
 - Sin **límite de intentos de login** (rate limiting).
@@ -405,5 +374,5 @@ Una mejora es parametrizar la zona horaria del negocio.
 - En producción las migraciones deben aplicarse desde el pipeline de despliegue, no al arrancar la aplicación.
 
 ## Autor
- 
+
 **José Alejandro** · [@joseovi](https://github.com/joseovi)
