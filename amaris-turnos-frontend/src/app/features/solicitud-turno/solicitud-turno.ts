@@ -20,7 +20,6 @@ export class SolicitudTurno implements OnInit {
   readonly errorMensaje = signal<string | null>(null);
 
   readonly form = this.fb.group({
-    cedula: ['', [Validators.required, Validators.pattern(/^\d{6,15}$/)]],
     sucursalId: [null as number | null, Validators.required]
   });
 
@@ -33,7 +32,7 @@ export class SolicitudTurno implements OnInit {
   ngOnInit(): void {
     this.sucursalService.obtenerTodas().subscribe({
       next: (sucursales) => {
-        this.sucursales.set(sucursales);
+        this.sucursales.set(sucursales.filter(s => s.activo));
         this.cargandoSucursales.set(false);
       },
       error: () => {
@@ -52,12 +51,12 @@ export class SolicitudTurno implements OnInit {
     this.enviando.set(true);
     this.errorMensaje.set(null);
 
-    const { cedula, sucursalId } = this.form.getRawValue();
+    const { sucursalId } = this.form.getRawValue();
 
-    this.turnoService.crearTurno({ cedula: cedula!, sucursalId: sucursalId! }).subscribe({
+    this.turnoService.crearTurno({ sucursalId: sucursalId! }).subscribe({
       next: (turno) => {
         this.enviando.set(false);
-        this.router.navigate(['/turno', turno.id]);
+        this.router.navigate(['/user/turno', turno.id]); // <- ajustado a la ruta correcta
       },
       error: (err) => {
         this.enviando.set(false);

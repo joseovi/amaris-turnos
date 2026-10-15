@@ -1,0 +1,95 @@
+<div class="contenedor-admin">
+  <div class="dashboard-header">
+    <div>
+      <h1 class="dashboard-titulo">Dashboard General</h1>
+      <p class="dashboard-subtitulo">Resumen operativo de turnos y métricas de la plataforma.</p>
+    </div>
+  </div>
+
+  @if (cargando()) {
+    <div class="state-loading">
+      <div class="spinner"></div>
+      <p>Cargando métricas...</p>
+    </div>
+  } @else if (datos(); as d) {
+    <!-- Sección 1: Operación de Turnos -->
+    <section class="dashboard-seccion">
+      <h2 class="seccion-titulo">Estado de Turnos</h2>
+      <div class="grid-metricas grid-metricas--turnos">
+        
+        <div class="tarjeta-metrica">
+          <div class="metrica-header">
+            <span class="metrica-label">Total hoy</span>
+            <span class="icono-kpi text-primario">📅</span>
+          </div>
+          <span class="metrica-numero">{{ d.turnosHoy }}</span>
+        </div>
+
+        <div class="tarjeta-metrica">
+          <div class="metrica-header">
+            <span class="metrica-label">Pendientes</span>
+            <span class="badge-status badge--pending">En espera</span>
+          </div>
+          <span class="metrica-numero">{{ d.pendientes }}</span>
+        </div>
+
+        <div class="tarjeta-metrica">
+          <div class="metrica-header">
+            <span class="metrica-label">Activos</span>
+            <span class="badge-status badge--active">En atención</span>
+          </div>
+          <span class="metrica-numero">{{ d.activos }}</span>
+        </div>
+
+        <div class="tarjeta-metrica">
+          <div class="metrica-header">
+            <span class="metrica-label">Completados</span>
+            <span class="badge-status badge--completed">Finalizados</span>
+          </div>
+          <span class="metrica-numero">{{ d.completados }}</span>
+        </div>
+
+        <div class="tarjeta-metrica">
+          <div class="metrica-header">
+            <span class="metrica-label">Expirados</span>
+            <span class="badge-status badge--expired">Vencidos</span>
+          </div>
+          <span class="metrica-numero">{{ d.expirados }}</span>
+        </div>
+
+        <div class="tarjeta-metrica">
+          <div class="metrica-header">
+            <span class="metrica-label">Cancelados</span>
+            <span class="badge-status badge--cancelled">Anulados</span>
+          </div>
+          <span class="metrica-numero">{{ d.cancelados }}</span>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Sección 2: Métricas Globales -->
+    <section class="dashboard-seccion">
+      <h2 class="seccion-titulo">Plataforma</h2>
+      <div class="grid-metricas grid-metricas--sistema">
+        
+        <div class="tarjeta-metrica tarjeta-metrica--destacada">
+          <div class="metrica-header">
+            <span class="metrica-label">Usuarios Registrados</span>
+            <span class="icono-kpi">👥</span>
+          </div>
+          <span class="metrica-numero">{{ d.totalUsuarios }}</span>
+        </div>
+
+        <div class="tarjeta-metrica tarjeta-metrica--destacada">
+          <div class="metrica-header">
+            <span class="metrica-label">Sucursales Activas</span>
+            <span class="icono-kpi">🏢</span>
+          </div>
+          <span class="metrica-numero">{{ d.totalSucursales }}</span>
+        </div>
+
+      </div>
+    </section>
+  }
+</div>

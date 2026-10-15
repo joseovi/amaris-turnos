@@ -1,0 +1,30 @@
+.contenedor-login {
+  max-width: 400px;
+  margin: 4rem auto;
+  padding: 2.5rem 2rem;
+  background-color: var(--color-blanco);
+  border-radius: var(--radio-borde);
+  box-shadow: var(--sombra-card);
+}
+
+.contenedor-login h1 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.contenedor-login button {
+  width: 100%;
+}
+
+.enlace-registro {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: var(--color-texto-secundario);
+}
+
+.enlace-registro a {
+  color: var(--color-primario);
+  font-weight: 600;
+  text-decoration: none;
+}

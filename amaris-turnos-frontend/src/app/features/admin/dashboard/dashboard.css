@@ -1,0 +1,136 @@
+.contenedor-admin {
+  max-width: 1200px;
+  margin: 2rem auto;
+  padding: 0 1.5rem;
+}
+
+/* Encabezado */
+.dashboard-header {
+  margin-bottom: 2rem;
+}
+
+.dashboard-titulo {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin: 0;
+}
+
+.dashboard-subtitulo {
+  font-size: 0.9rem;
+  color: #64748b;
+  margin-top: 0.25rem;
+}
+
+/* Secciones */
+.dashboard-seccion {
+  margin-bottom: 2rem;
+}
+
+.seccion-titulo {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #475569;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Grids Flexibles */
+.grid-metricas {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.grid-metricas--turnos {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+.grid-metricas--sistema {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+/* Tarjetas Pro */
+.tarjeta-metrica {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.tarjeta-metrica:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.metrica-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.metrica-label {
+  font-size: 0.825rem;
+  font-weight: 600;
+  color: #64748b;
+}
+
+.metrica-numero {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1;
+}
+
+.icono-kpi {
+  font-size: 1.2rem;
+}
+
+/* Badges de estado dentro de las tarjetas */
+.badge-status {
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 0.2rem 0.5rem;
+  border-radius: 6px;
+}
+
+.badge--pending { background-color: #fef3c7; color: #92400e; }
+.badge--active { background-color: #e0f2fe; color: #0369a1; }
+.badge--completed { background-color: #dcfce7; color: #15803d; }
+.badge--expired { background-color: #fee2e2; color: #b91c1c; }
+.badge--cancelled { background-color: #f1f5f9; color: #475569; }
+
+/* Tarjetas destacadas de sistema */
+.tarjeta-metrica--destacada {
+  background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+  border-left: 4px solid var(--color-primario, #0284c7);
+}
+
+/* Spinner de carga pro */
+.state-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem;
+  color: #64748b;
+}
+
+.spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid #e2e8f0;
+  border-top-color: var(--color-primario, #0284c7);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-bottom: 1rem;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}

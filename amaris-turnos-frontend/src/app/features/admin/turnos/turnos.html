@@ -1,0 +1,80 @@
+<div class="contenedor-admin">
+  <h1>Turnos del sistema</h1>
+
+  <form [formGroup]="filtros" (ngSubmit)="buscar()" class="form-filtros">
+    <input type="date" formControlName="fecha" />
+    <select formControlName="sucursalId">
+      <option value="">Todas las sucursales</option>
+      @for (s of sucursales(); track s.id) {
+        <option [value]="s.id">{{ s.nombre }}</option>
+      }
+    </select>
+    <select formControlName="estado">
+      <option value="">Todos los estados</option>
+      <option value="Pending">Pendiente</option>
+      <option value="Active">Activo</option>
+      <option value="Completed">Completado</option>
+      <option value="Expired">Expirado</option>
+      <option value="Cancelled">Cancelado</option>
+    </select>
+    <input type="text" formControlName="cedula" placeholder="Buscar por cédula..." />
+    <button type="submit">Filtrar</button>
+  </form>
+
+  @if (errorMensaje()) {
+    <p class="error-general">{{ errorMensaje() }}</p>
+  }
+
+  @if (cargando()) {
+    <p>Cargando turnos...</p>
+  } @else {
+    <table class="tabla-admin">
+      <thead>
+        <tr>
+          <th>Cédula</th>
+          <th>Nombre</th>
+          <th>Sucursal</th>
+          <th>Estado</th>
+          <th>Tiempo restante</th>
+          <th>Creado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (turno of turnos(); track turno.id) {
+          <tr>
+            <td>{{ turno.usuarioCedula }}</td>
+            <td>{{ turno.usuarioNombre }}</td>
+            <td>{{ turno.sucursalNombre }}</td>
+            <td><span class="badge-{{ turno.estado.toLowerCase() }}">{{ turno.estado }}</span></td>
+            
+            <!-- Celda de Tiempo Restante -->
+            <td>
+              @if (turno.estado === 'Pending') {
+                @let info = obtenerTiempoRestante(turno.fechaCreacionUtc);
+                <div class="celda-tiempo">
+                  <span class="tiempo-texto">⏱️ {{ info.texto }}</span>
+                  <div class="barra-mini-bg">
+                    <div class="barra-mini-fill" [style.width.%]="info.porcentaje"></div>
+                  </div>
+                </div>
+              } @else {
+                <span class="tiempo-inactivo">—</span>
+              }
+            </td>
+
+            <td>{{ turno.fechaCreacionUtc | date: 'dd/MM/yyyy, h:mm a' }}</td>
+            <td>
+              @if (puedeCompletar(turno)) {
+                <button class="btn-exito" (click)="completar(turno.id)">Completar</button>
+              }
+              @if (puedeCancelar(turno)) {
+                <button class="btn-secundario" (click)="cancelar(turno.id)">Cancelar</button>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

@@ -1,0 +1,122 @@
+.form-filtros {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+  background-color: var(--color-blanco);
+  padding: 1rem;
+  border-radius: var(--radio-borde);
+  box-shadow: var(--sombra-card);
+}
+
+.form-filtros input,
+.form-filtros select {
+  margin-top: 0;
+  width: auto;
+  flex: 1;
+  min-width: 140px;
+}
+
+.form-filtros button {
+  margin-top: 0;
+}
+
+.tabla-admin {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--color-blanco);
+  border-radius: var(--radio-borde);
+  overflow: hidden;
+  box-shadow: var(--sombra-card);
+}
+
+.tabla-admin th,
+.tabla-admin td {
+  padding: 0.9rem 1.25rem;
+  text-align: left;
+  font-size: 0.9rem;
+  border-bottom: 1px solid var(--color-borde);
+  vertical-align: middle;
+}
+
+.tabla-admin th {
+  background-color: var(--color-fondo);
+  color: var(--color-texto-secundario);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.04em;
+}
+
+.tabla-admin tbody tr {
+  transition: background-color 0.1s ease;
+}
+
+.tabla-admin tbody tr:hover {
+  background-color: var(--color-fondo);
+}
+
+.tabla-admin tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla-admin select {
+  padding: 0.35rem 0.6rem;
+  font-size: 0.85rem;
+  margin-top: 0;
+}
+
+.tabla-admin button {
+  margin-top: 0;
+  padding: 0.45rem 1rem;
+  font-size: 0.8rem;
+}
+
+.tabla-admin td:last-child {
+  white-space: nowrap;
+}
+
+/* Celda de Tiempo Restante */
+.celda-tiempo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  min-width: 100px;
+}
+
+.tiempo-texto {
+  font-family: monospace;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #b8860b;
+}
+
+.barra-mini-bg {
+  width: 100%;
+  height: 4px;
+  background-color: var(--color-borde, #e2e8f0);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.barra-mini-fill {
+  height: 100%;
+  background-color: #09eb2f; /* Verde lima alineado a la barra de usuario */
+  transition: width 1s linear;
+}
+
+.tiempo-inactivo {
+  color: var(--color-texto-secundario);
+  font-size: 0.85rem;
+}
+
+.btn-exito {
+  background-color: transparent;
+  color: var(--color-exito);
+  border: 1px solid var(--color-exito);
+  margin-right: 0.4rem;
+}
+
+.btn-exito:hover:not(:disabled) {
+  background-color: var(--color-exito-fondo);
+}

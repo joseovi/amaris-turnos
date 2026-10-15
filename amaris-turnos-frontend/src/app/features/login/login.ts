@@ -1,11 +1,11 @@
 import { Component, signal } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../core/services/authService';
 
 @Component({
   selector: 'app-login',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RouterLink],
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
@@ -21,13 +21,12 @@ export class Login {
     private router: Router
   ) {
     this.form = this.fb.group({
-      nombreUsuario: ['', Validators.required],
+      cedula: ['', [Validators.required, Validators.pattern(/^\d{6,15}$/)]],
       password: ['', Validators.required]
     });
   }
 
   enviar(): void {
-    console.log('enviar() se ejecutó', this.form.value, this.form.valid);
     if (this.form.invalid) {
       this.form.markAllAsTouched();
       return;
@@ -36,18 +35,18 @@ export class Login {
     this.cargando.set(true);
     this.errorMensaje.set(null);
 
-    this.authService.login(this.form.getRawValue() as { nombreUsuario: string; password: string })
+    this.authService.login(this.form.getRawValue() as { cedula: string; password: string })
       .subscribe({
         next: () => {
           this.cargando.set(false);
-          this.router.navigate(['/solicitar-turno']);
+          this.router.navigate([this.authService.rutaInicioSegunRol()]);
         },
         error: (err) => {
           this.cargando.set(false);
           this.errorMensaje.set(
             err.status === 401
-              ? 'Usuario o contraseña incorrectos.'
-              : 'No se pudo conectar con el servidor. Intenta nuevamente.'
+              ? 'Cédula o contraseña incorrectos.'
+              : (err.error?.error ?? 'No se pudo conectar con el servidor.')
           );
         }
       });

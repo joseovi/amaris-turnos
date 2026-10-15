@@ -1,0 +1,16 @@
+<div class="countdown" [class.countdown--critico]="porcentajeRestante() < 20">
+  <div class="countdown__barra-fondo">
+    <div
+      class="countdown__barra-relleno"
+      [style.width.%]="porcentajeRestante()"
+      [style.background-color]="colorBarra()"
+    ></div>
+  </div>
+  <p class="countdown__texto" [style.color]="porcentajeRestante() < 20 ? colorBarra() : null">
+    @if (segundosRestantes() > 0) {
+      Tiempo restante para activar: <strong>{{ textoTiempo() }}</strong>
+    } @else {
+      El tiempo para activar este turno se agotó.
+    }
+  </p>
+</div>

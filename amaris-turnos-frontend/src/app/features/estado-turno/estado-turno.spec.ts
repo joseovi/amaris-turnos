@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { provideRouter } from '@angular/router';
 import { EstadoTurno } from './estado-turno';
 
 describe('EstadoTurno', () => {
@@ -9,11 +9,12 @@ describe('EstadoTurno', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [EstadoTurno],
+      providers: [provideRouter([])] 
     }).compileComponents();
 
     fixture = TestBed.createComponent(EstadoTurno);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {

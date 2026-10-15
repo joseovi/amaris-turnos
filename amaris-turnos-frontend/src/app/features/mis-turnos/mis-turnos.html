@@ -1,0 +1,46 @@
+<div class="contenedor-mis-turnos">
+  <div class="encabezado">
+    <h1>Mis turnos de hoy</h1>
+    <button class="btn-nuevo" (click)="irASolicitar()">+ Nuevo turno</button>
+  </div>
+
+  @if (cargando()) {
+    <p>Cargando turnos...</p>
+  } @else if (turnos().length === 0) {
+    <p class="sin-turnos">Aún no tienes turnos solicitados hoy.</p>
+  } @else {
+    @if (turnos().length >= limiteDiario) {
+      <p class="aviso aviso--limite">
+        Has alcanzado el límite de {{ limiteDiario }} turnos diarios. Podrás solicitar uno nuevo mañana.
+      </p>
+    }
+
+    <div class="lista-turnos">
+      @for (turno of turnos(); track turno.id) {
+        <div class="tarjeta-turno">
+          <div class="tarjeta-turno__header">
+            <span class="tarjeta-turno__id">Turno #{{ turno.id }}</span>
+            <span class="badge-{{ turno.estado.toLowerCase() }}">{{ turno.estado }}</span>
+          </div>
+
+          <p><strong>Sucursal:</strong> {{ turno.sucursalNombre }}</p>
+          <p><strong>Generado:</strong> {{ turno.fechaCreacionUtc | date: 'shortTime' }}</p>
+
+          @if (turno.estado === 'Pending') {
+            <app-countdown-turno [fechaExpiracionUtc]="turno.fechaExpiracionUtc" (expirado)="cargar()" />
+
+            <button (click)="activar(turno.id)" [disabled]="activandoId() === turno.id">
+              {{ activandoId() === turno.id ? 'Activando...' : 'Activar turno' }}
+            </button>
+          }
+
+          <button class="btn-secundario" (click)="verDetalle(turno.id)">Ver detalle</button>
+        </div>
+      }
+    </div>
+  }
+
+  @if (errorMensaje()) {
+    <p class="error-general">{{ errorMensaje() }}</p>
+  }
+</div>

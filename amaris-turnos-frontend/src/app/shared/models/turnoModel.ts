@@ -3,6 +3,7 @@ export interface Sucursal {
   nombre: string;
   direccion: string;
   ciudad: string;
+  activo: boolean;
 }
 
 export type EstadoTurno = 'Pending' | 'Active' | 'Expired' | 'Completed' | 'Cancelled';
@@ -20,6 +21,5 @@ export interface Turno {
 }
 
 export interface CrearTurnoRequest {
-  cedula: string;
   sucursalId: number;
 }

@@ -1,0 +1,12 @@
+.contenedor-solicitud {
+  max-width: 480px;
+  margin: 3rem auto;
+  padding: 2.5rem 2rem;
+  background-color: var(--color-blanco);
+  border-radius: var(--radio-borde);
+  box-shadow: var(--sombra-card);
+}
+
+.contenedor-solicitud button {
+  width: 100%;
+}

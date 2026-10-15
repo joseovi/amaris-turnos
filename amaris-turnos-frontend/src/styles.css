@@ -1,1 +1,122 @@
-/* You can add global styles to this file, and also import other style files */
+:root {
+  /* Paleta - tono bancario serio, azul confiable */
+  --color-primario: #0f4c81;
+  --color-primario-hover: #0c3d68;
+  --color-primario-claro: #e8f0f8;
+  --color-exito: #1e7e34;
+  --color-exito-fondo: #e6f4ea;
+  --color-error: #c0392b;
+  --color-error-fondo: #fdecea;
+  --color-advertencia: #b8860b;
+  --color-advertencia-fondo: #fdf6e3;
+  --color-texto: #1a1a2e;
+  --color-texto-secundario: #5a6472;
+  --color-borde: #d7dde3;
+  --color-fondo: #f4f6f9;
+  --color-blanco: #ffffff;
+
+  --radio-borde: 8px;
+  --sombra-card: 0 2px 8px rgba(15, 76, 129, 0.08);
+  --espaciado: 1rem;
+
+  --fuente-base: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--fuente-base);
+  background-color: var(--color-fondo);
+  color: var(--color-texto);
+  min-height: 100vh;
+}
+
+h1 {
+  font-size: 1.5rem;
+  color: var(--color-primario);
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--color-texto-secundario);
+  margin-bottom: 0.35rem;
+  margin-top: 1rem;
+}
+
+input,
+select {
+  width: 100%;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--color-borde);
+  border-radius: var(--radio-borde);
+  font-size: 1rem;
+  font-family: inherit;
+  background-color: var(--color-blanco);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--color-primario);
+  box-shadow: 0 0 0 3px var(--color-primario-claro);
+}
+
+input.ng-invalid.ng-touched,
+select.ng-invalid.ng-touched {
+  border-color: var(--color-error);
+}
+
+button {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.7rem 1.5rem;
+  border: none;
+  border-radius: var(--radio-borde);
+  background-color: var(--color-primario);
+  color: var(--color-blanco);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+  margin-top: 1.25rem;
+}
+
+button:hover:not(:disabled) {
+  background-color: var(--color-primario-hover);
+}
+
+button:disabled {
+  background-color: var(--color-borde);
+  cursor: not-allowed;
+}
+
+.error-campo {
+  color: var(--color-error);
+  font-size: 0.8rem;
+  margin: 0.3rem 0 0;
+}
+
+.error-general {
+  background-color: var(--color-error-fondo);
+  color: var(--color-error);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radio-borde);
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+
+.aviso {
+  background-color: var(--color-advertencia-fondo);
+  color: #7a5c00;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radio-borde);
+  margin-top: 1.25rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}

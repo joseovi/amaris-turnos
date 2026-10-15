@@ -7,23 +7,29 @@
     <p><strong>Cédula:</strong> {{ t.cedula }}</p>
     <p><strong>Sucursal:</strong> {{ t.sucursalNombre }}</p>
     <p><strong>Estado:</strong> <span class="badge-{{ t.estado.toLowerCase() }}">{{ t.estado }}</span></p>
-    <p><strong>Creado:</strong> {{ t.fechaCreacionUtc | date: 'short' }}</p>
-    <p><strong>Expira:</strong> {{ t.fechaExpiracionUtc | date: 'short' }}</p>
+    <p><strong>Creado:</strong> {{ t.fechaCreacionUtc | date: 'dd/MM/yyyy, h:mm a' }}</p>
 
     @if (t.estado === 'Pending') {
+      <app-countdown-turno
+        [fechaExpiracionUtc]="t.fechaExpiracionUtc"
+        (expirado)="onExpirado()"
+      />
+
       <button (click)="activar()" [disabled]="activando()">
         {{ activando() ? 'Activando...' : 'Activar turno en sucursal' }}
       </button>
     }
 
     @if (t.estado === 'Expired') {
-      <p class="error-general">Este turno expiró. Puedes solicitar uno nuevo.</p>
-      <button (click)="solicitarOtroTurno()">Solicitar otro turno</button>
+      <p class="error-general">Este turno expiró.</p>
     }
 
     @if (errorMensaje()) {
       <p class="error-general">{{ errorMensaje() }}</p>
     }
+
+    <button type="button" routerLink="/user/agendar" class="btn-volver"> Volver a solicitar turno
+    </button>
   } @else {
     <p class="error-general">No se encontró el turno.</p>
   }

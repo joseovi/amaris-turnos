@@ -2,11 +2,11 @@
   <h1>Sistema de Turnos - Acceso</h1>
 
   <form [formGroup]="form" (ngSubmit)="enviar()">
-    <label for="nombreUsuario">Usuario</label>
-    <input id="nombreUsuario" type="text" formControlName="nombreUsuario" />
+    <label for="cedula">Número de cédula</label>
+    <input id="cedula" type="text" formControlName="cedula" />
 
-    @if (form.get('nombreUsuario')?.invalid && form.get('nombreUsuario')?.touched) {
-      <p class="error-campo">El usuario es obligatorio.</p>
+    @if (form.get('cedula')?.invalid && form.get('cedula')?.touched) {
+      <p class="error-campo">Ingresa una cédula válida.</p>
     }
 
     <label for="password">Contraseña</label>
@@ -24,4 +24,8 @@
       {{ cargando() ? 'Ingresando...' : 'Ingresar' }}
     </button>
   </form>
+
+  <p class="enlace-registro">
+    ¿No tienes cuenta? <a routerLink="/registro">Regístrate aquí</a>
+  </p>
 </div>

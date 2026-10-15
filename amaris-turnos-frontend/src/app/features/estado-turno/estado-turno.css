@@ -1,0 +1,89 @@
+.contenedor-estado {
+  max-width: 480px;
+  margin: 3rem auto;
+  padding: 2.5rem 2rem;
+  background-color: var(--color-blanco);
+  border-radius: var(--radio-borde);
+  box-shadow: var(--sombra-card);
+}
+
+.contenedor-estado p {
+  margin: 0.75rem 0;
+  font-size: 0.95rem;
+}
+
+.contenedor-estado p strong {
+  color: var(--color-texto-secundario);
+  font-weight: 600;
+  margin-right: 0.4rem;
+}
+
+[class^='badge-'] {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.enlace-volver {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: var(--color-primario);
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.enlace-volver:hover {
+  text-decoration: underline;
+}
+
+.badge-pending {
+  background-color: var(--color-advertencia-fondo);
+  color: #7a5c00;
+}
+
+.badge-active {
+  background-color: var(--color-primario-claro);
+  color: var(--color-primario);
+}
+
+.badge-expired {
+  background-color: var(--color-error-fondo);
+  color: var(--color-error);
+}
+
+.badge-completed {
+  background-color: var(--color-exito-fondo);
+  color: var(--color-exito);
+}
+
+.badge-cancelled {
+  background-color: #eceff1;
+  color: #607080;
+}
+
+.contenedor-estado button {
+  width: 100%;
+}
+
+.btn-volver {
+  display: block;
+  width: 100%;
+  margin-top: 1.5rem;
+  padding: 0.75rem 1.25rem;
+  background-color: var(--color-primario);
+  color: #ffffff;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: none;
+  border-radius: var(--radio-borde);
+  cursor: pointer;
+  transition: background-color 0.2s, opacity 0.2s;
+}
+
+.btn-volver:hover {
+  opacity: 0.9;
+}

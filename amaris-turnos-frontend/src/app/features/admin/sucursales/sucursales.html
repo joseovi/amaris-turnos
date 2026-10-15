@@ -1,0 +1,60 @@
+<div class="contenedor-admin">
+  <div class="encabezado">
+    <h1>Gestión de sucursales</h1>
+    <button (click)="mostrarFormulario() ? mostrarFormulario.set(false) : abrirCrear()">
+      {{ mostrarFormulario() ? 'Cancelar' : '+ Crear sucursal' }}
+    </button>
+  </div>
+
+  @if (mostrarFormulario()) {
+    <form [formGroup]="form" (ngSubmit)="guardar()" class="form-inline" autocomplete="off">
+      <input type="text" formControlName="nombre" placeholder="Nombre" autocomplete="off" />
+      <input type="text" formControlName="direccion" placeholder="Dirección" autocomplete="off" />
+      <input type="text" formControlName="ciudad" placeholder="Ciudad" autocomplete="off" />
+      <button type="submit" [disabled]="guardando()">
+        {{ guardando() ? 'Guardando...' : (editandoId() ? 'Actualizar' : 'Crear') }}
+      </button>
+    </form>
+  }
+
+  @if (errorMensaje()) {
+    <p class="error-general">{{ errorMensaje() }}</p>
+  }
+
+  @if (cargando()) {
+    <p>Cargando sucursales...</p>
+  } @else {
+    <table class="tabla-admin">
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Dirección</th>
+          <th>Ciudad</th>
+          <th>Estado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (sucursal of sucursales(); track sucursal.id) {
+          <tr>
+            <td>{{ sucursal.nombre }}</td>
+            <td>{{ sucursal.direccion }}</td>
+            <td>{{ sucursal.ciudad }}</td>
+            <td>
+              <span class="badge-{{ sucursal.activo ? 'active' : 'expired' }}">
+                {{ sucursal.activo ? 'Activa' : 'Inactiva' }}
+              </span>
+            </td>
+            <td>
+              <button class="btn-secundario" (click)="abrirEditar(sucursal)">Editar</button>
+              <button class="btn-secundario" (click)="alternarEstado(sucursal)">
+                {{ sucursal.activo ? 'Desactivar' : 'Activar' }}
+              </button>
+              <button class="btn-peligro" (click)="eliminar(sucursal)">Eliminar</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

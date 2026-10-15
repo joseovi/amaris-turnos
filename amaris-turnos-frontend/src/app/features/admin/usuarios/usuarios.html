@@ -1,0 +1,78 @@
+<div class="contenedor-admin">
+  <div class="encabezado">
+    <h1>Gestión de usuarios</h1>
+    <button (click)="mostrarFormulario.set(!mostrarFormulario())">
+      {{ mostrarFormulario() ? 'Cancelar' : '+ Crear usuario' }}
+    </button>
+  </div>
+
+  <input
+    type="text"
+    placeholder="Buscar por cédula o nombre..."
+    class="input-busqueda"
+    (input)="buscar($any($event.target).value)"
+  />
+
+  @if (mostrarFormulario()) {
+    <form [formGroup]="form" (ngSubmit)="crear()" class="form-inline" autocomplete="off">
+      <input type="text" formControlName="cedula" placeholder="Cédula" autocomplete="off" />
+      <input type="text" formControlName="nombre" placeholder="Nombre completo" autocomplete="off" />
+      <input type="email" formControlName="email" placeholder="Email (opcional)" autocomplete="off" />
+      <input type="password" formControlName="password" placeholder="Contraseña" autocomplete="new-password" />
+      <select formControlName="rol">
+        <option value="Usuario">Usuario</option>
+        <option value="Admin">Admin</option>
+    </select>
+  <button type="submit">Guardar</button>
+</form>
+  }
+
+  @if (errorMensaje()) {
+    <p class="error-general">{{ errorMensaje() }}</p>
+  }
+
+  @if (cargando()) {
+    <p>Cargando usuarios...</p>
+  } @else {
+    <table class="tabla-admin">
+      <thead>
+        <tr>
+          <th>Cédula</th>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Rol</th>
+          <th>Estado</th>
+          <th>Registrado</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (usuario of usuarios(); track usuario.id) {
+          <tr>
+            <td>{{ usuario.cedula }}</td>
+            <td>{{ usuario.nombre }}</td>
+            <td>{{ usuario.email || '—' }}</td>
+            <td>{{ usuario.createdAtUtc | date: 'short' }}</td>
+            <td>
+              <select [value]="usuario.rol" (change)="cambiarRol(usuario, $any($event.target).value)">
+                <option value="Usuario">Usuario</option>
+                <option value="Admin">Admin</option>
+              </select>
+            </td>
+            <td>
+              <span class="badge-{{ usuario.activo ? 'active' : 'expired' }}">
+                {{ usuario.activo ? 'Activo' : 'Inactivo' }}
+              </span>
+            </td>
+            <td>
+              <button class="btn-secundario" (click)="alternarEstado(usuario)">
+                {{ usuario.activo ? 'Desactivar' : 'Activar' }}
+              </button>
+              <button class="btn-peligro" (click)="eliminar(usuario)">Eliminar</button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  }
+</div>

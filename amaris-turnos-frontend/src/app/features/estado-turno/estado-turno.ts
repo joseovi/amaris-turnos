@@ -1,12 +1,13 @@
 import { Component, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { TurnoService } from '../../core/services/turnoService';
 import { Turno } from '../../shared/models/turnoModel';
+import {CountdownTurno} from '../../shared/countdown-turno/countdown-turno';
 
 @Component({
   selector: 'app-estado-turno',
-  imports: [DatePipe],
+  imports: [DatePipe, CountdownTurno, RouterLink],
   templateUrl: './estado-turno.html',
   styleUrl: './estado-turno.css',
 })
@@ -26,6 +27,10 @@ export class EstadoTurno implements OnInit {
 
   ngOnInit(): void {
     this.turnoId = Number(this.route.snapshot.paramMap.get('id'));
+    this.cargarTurno();
+  }
+
+  onExpirado(): void {
     this.cargarTurno();
   }
 
@@ -61,6 +66,6 @@ export class EstadoTurno implements OnInit {
   }
 
   solicitarOtroTurno(): void {
-    this.router.navigate(['/solicitar-turno']);
+    this.router.navigate(['/user/agendar']);
   }
 }

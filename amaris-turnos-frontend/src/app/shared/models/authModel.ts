@@ -1,11 +1,19 @@
 export interface LoginRequest {
-  nombreUsuario: string;
+  cedula: string;
+  password: string;
+}
+
+export interface RegistroRequest {
+  cedula: string;
+  nombre: string;
+  email?: string;
   password: string;
 }
 
 export interface LoginResponse {
   token: string;
   expiraUtc: string;
-  nombreUsuario: string;
-  rol: string;
+  cedula: string;
+  nombre: string;
+  rol: 'Usuario' | 'Admin';
 }

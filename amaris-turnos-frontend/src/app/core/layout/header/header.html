@@ -1,0 +1,39 @@
+@if (authService.estaAutenticado()()) {
+  <header class="app-header">
+    <a [routerLink]="authService.rutaInicioSegunRol()" class="logo">
+      🏦 Amaris Turnos
+    </a>
+
+    <nav class="app-header__nav">
+      @if (authService.obtenerUsuarioActual()(); as usuario) {
+        <!-- Grupo de enlaces de navegación -->
+        <div class="nav-links">
+          @if (usuario.rol === 'Usuario') {
+            <a routerLink="/user/mis-turnos" routerLinkActive="active" class="nav-link">Mis turnos</a>
+            <a routerLink="/user/agendar" routerLinkActive="active" class="nav-link">Nuevo turno</a>
+          }
+
+          @if (usuario.rol === 'Admin') {
+            <a routerLink="/admin" routerLinkActive="active" class="nav-link">Dashboard</a>
+            <a routerLink="/admin/usuarios" routerLinkActive="active" class="nav-link">Usuarios</a>
+            <a routerLink="/admin/turnos" routerLinkActive="active" class="nav-link">Turnos</a>
+            <a routerLink="/admin/sucursales" class="nav-link">Sucursales</a>
+          }
+        </div>
+
+        <!-- Separador vertical discreto -->
+        <div class="nav-divider"></div>
+
+        <!-- Sección de perfil de usuario -->
+        <div class="usuario-info">
+          <span class="usuario-nombre">{{ usuario.nombre }}</span>
+          <span class="badge-rol badge-rol--{{ usuario.rol.toLowerCase() }}">
+            {{ usuario.rol }}
+          </span>
+        </div>
+      }
+
+      <button class="btn-secundario" (click)="cerrarSesion()">Cerrar sesión</button>
+    </nav>
+  </header>
+}

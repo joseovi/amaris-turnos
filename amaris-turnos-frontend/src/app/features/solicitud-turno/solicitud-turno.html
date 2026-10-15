@@ -5,13 +5,6 @@
     <p>Cargando sucursales...</p>
   } @else {
     <form [formGroup]="form" (ngSubmit)="solicitarTurno()">
-      <label for="cedula">Número de cédula</label>
-      <input id="cedula" type="text" formControlName="cedula" placeholder="Ej: 123456789" />
-
-      @if (form.get('cedula')?.invalid && form.get('cedula')?.touched) {
-        <p class="error-campo">Ingresa una cédula válida (solo números, 6 a 15 dígitos).</p>
-      }
-
       <label for="sucursalId">Sucursal</label>
       <select id="sucursalId" formControlName="sucursalId">
         <option [ngValue]="null" disabled>Selecciona una sucursal</option>
